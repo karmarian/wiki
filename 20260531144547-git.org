@@ -1,0 +1,9 @@
+:PROPERTIES:
+:ID:       7a6aaf31-f180-409d-ba9f-5fb029ea72d5
+:END:
+#+title: Git
+
+* Version control for coding projects
+
+* Version control for binary documents and files
+- [[id:2f6e69b2-2bfc-47f7-8ad5-bbfe8100fbba][Git-Annex]]
