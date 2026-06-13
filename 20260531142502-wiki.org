@@ -5,3 +5,8 @@
 
 * Version control systems
 - [[id:7a6aaf31-f180-409d-ba9f-5fb029ea72d5][Git]]
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

@@ -71,3 +71,8 @@ summary by an LLM.
 
 * Version control for binary documents and files
 - [[id:2f6e69b2-2bfc-47f7-8ad5-bbfe8100fbba][Git-Annex]]
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0
