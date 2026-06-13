@@ -1,0 +1,79 @@
+:PROPERTIES:
+:ID:       8c32cdfa-a145-4a17-8d71-80e9d480fcdd
+:END:
+#+title: Digital Independence
+
+There are a lot of projects especially by the Free Software Foundation Europe to
+gouvern digial self-souvereignability of users, politics and states.
+The principles are well-known from topics before the internet and
+digitalisation.
+There is the goal to prevent monopolies by companies, distribute the power of
+the press with diverse public and private options and enable rights like [[id:40e9cc38-ea86-4cf5-aea5-275873c26885][Privacy]]
+and free speech to defend the will of the people and freedom in a democratic
+system.
+Big Tech companies are getting in the way of these goals by Vendor lock-in,
+social media powered by algorithms and business models centered around the
+collection of user data.
+This often involves not only the user, but also linked friends and family
+members.
+
+* The network effect and Vendor lock-in
+Vendor lock-in is a practice often applied, because the winner will take it all.
+This is the network effect of Facebook, Whatsapp, TikTok, X, Office365 and
+YouTube.
+The effect is simple, because it's very conveniant to stay at your first Mail
+provider without changing all the account data for example and on most social
+media platforms there is no possibility to export your user data to switch to
+another platform.
+There are free software alternatives, which try to prevent these mechanisms by
+relying on open standards/protocols to enable application diversity like
+[[https://jointhefediverse.net/][Fediverse]], [[https://matrix.org/][Matrix]] or [[https://xmpp.org/][XMPP]].
+The latter was already there before Whatsapp and the closed version of XMPP by
+Whatsapp was made easy to use and conveniant and the network effect plus Vendor
+lock-in made it so successfull.
+There are a lot of closed implementations of XMPP e.g. Google Talk, Facebook
+Messenger and gaming chat platforms.
+
+There is the impression that solutions like [[https://www.libreoffice.org/][Libre Office]] or even [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
+as a whole are not compatible or not interoperable.
+This is most of the time by design and this means that in this case Microsoft
+has an interest to bound their users to their applications by using their own
+protocols and formats like .docx.
+Other companies will rely on the widely used software like Microsoft Teams to be
+in contact with other companies, which are using these tools.
+Companies are developing applications and drivers for an operating system like
+Windows, because this is where the most money for consumer products and desktop
+users can be made.
+Since this software is often proprietary, it is not always possible to port it
+to different operating systems by other parties.
+
+This is also the case for Android and iPhone smartphones.
+The app store of iPhones were always a lot more restricted and controlled by
+Apple to serve their interest as an important distribution platform for a lot of
+companies.
+The Android eco-system was more free in terms of the possibilities to install
+apps from different sources.
+However, the goal of Google is to reduce this user freedom by adding
+restrictions for the app developers and app stores in the name of security, but
+the true reasons in this regard are often mainly focused on profit maximisation.
+This is also the reason to lock down device drivers for Pixel hardware and
+delaying information about bugfix patches to make the job of custom Android
+operating systems on top of the [[https://source.android.com/][Android Open Source Project]] like
+[[https://grapheneos.org/][Graphene OS]] harder.
+
+The usage of Free software, open protocols, free operating systems and cloud
+services is often the key for interoperability and the prevention of lock-in and
+dependencies on specific service providers, but to switch there is often the
+requirement to leave something/somebody behind caused by the network effect and
+Vendor lock-in.
+
+** [[https://di.day/en][DiDay]]
+There are multiple initiatives, which try to fix these dependencies on Big Tech
+companies.
+The DiDay project is meant as a starting point to get rid of some services one
+at a time, because this can be done quickly without overwhelming users.
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

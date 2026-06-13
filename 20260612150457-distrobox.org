@@ -11,3 +11,8 @@ It's not designed to increase the security of system like classical container
 technology.
 It's more similar to Singularity/Apptainer and portable Systemd containers, but
 used a lot for non-bussiness purposes on a lot of distributions.
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

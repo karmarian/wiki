@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       632e3870-2dc8-44bd-b878-979c0072187c
+:END:
+#+title: Free Software
+
+Free software does not have to be free as in free beer.
+It's about user freedom as in libre.
+
+* Free Software Foundation
+There is obviously the mother foundation in the United States, which is the [[https://www.fsf.org/][Free
+Software Foundation]].
+The [[https://fsfe.org/freesoftware/][Four Freedoms]] defined are to use, study, share and improve source code of
+any software/program.
+To guard these principles, several licenses like the [[https://www.gnu.org/licenses/gpl-3.0.en.html][GPL]] were introduced
+together with the [[https://www.gnu.org/licenses/copyleft.en.html][Copyleft]] principle.
+The Free Software Foundation has the goal to spread awareness and bring user
+freedom to the people.
+This is done by sponsoring the [[https://www.gnu.org/][GNU]] project for example, which is used a lot
+especially with things like the gnu-coreutils or the [[https://www.gnome.org/][GNOME]] desktop environment.
+GNU is free software mainly to be used with the Linux kernel in GNU/Linux
+operating systems.
+Because there should not be a point of single failure, there are also projects
+like [[https://www.gnu.org/software/hurd/][GNU Hurd]] to make more freedom respecting options.
+
+In addition, there are a lot of distributed daughter foundations and communities
+around it for example the [[https://fsfe.org/][Free Software Foundation Europe]].
+They have a lot of important projects, which they try to push in the public
+sector and politics like:
+- [[https://fsfe.org/activities/publiccode/publiccode.en.html][Public Money, Public Code]]
+- [[https://fsfe.org/activities/deviceneutrality/index][Device Neutrality]]
+- [[https://fsfe.org/activities/routers/routers.en.html][Router Freedom]]
+- [[https://fsfe.org/activities/android/android.en.html][Free Your Android]]
+- [[https://www.fsf.org/campaigns/fight-to-repair][Fight to Repair]]
+- [[https://reuse.software/][REUSE Software]]
+
+* [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
+
+* [[id:8c32cdfa-a145-4a17-8d71-80e9d480fcdd][Digital Independence]]
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

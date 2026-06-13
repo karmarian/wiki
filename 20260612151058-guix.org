@@ -21,3 +21,8 @@ It's quite impressive to see how much packages are available in Guix for
 different architectures though.
 A good starting point are also the blog entries, code examples and videos by
 David Wilson at [[https://systemcrafters.net/craft-your-system-with-guix/][SystemCrafters]].
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

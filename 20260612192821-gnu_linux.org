@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       507abdf6-b785-4b29-9271-c365c5fe1a6c
+:END:
+#+title: GNU/Linux
+
+GNU/Linux is an operating system with a lot of freedom and diversity.
+It is based on the [[https://github.com/torvalds/linux][Linux Kernel]] and more or less utilities by the [[https://www.gnu.org/][GNU]] project
+and other free software.
+There is also more or less proprietary software and binary firmware/microcode
+blobs involved depending on the distribution (operating system) and hardware
+architecture.
+
+* Beginner-friendly
+The most popular easy to use distribution is [[https://www.linuxmint.com/][Linux Mint]].
+The community is great and there are a lot of ressources for beginners to help
+with certain issues.
+Everything should run as expected out of the box and even printer drivers should
+run fine without any effort.
+However, in the best case the compatibility of hardware drivers should be a
+reason to consider before buying a hardware for a GNU/Linux machine.
+The user interface is made to be simple and elegant.
+The maintenance effort is reduced compared to most other GNU/Linux
+distributions.
+There is also nothing stopping advanced users to run Linux Mint, so there are
+all these diverse options available for using, studying, sharing and improving
+the system in freedom.
+
+More current hardware drivers or software might be required for new laptops or
+gaming use-cases.
+This could be a reason to choose [[https://ubuntu.com/][(K)Ubuntu]] instead of Mint, however the latter
+also has options for this.
+Ubuntu might be also better, if there is an interrest in self-hosting services,
+because Ubuntu can be used as server operating system.
+
+For users, which do not have a lot of requirements other than browsing, learing
+and chatting, [[https://endlessglobal.com/][Endless OS]] might be an option to consider.
+It is meant to have zero maintenance effort and designed specifically for
+untrained adolescents.
+
+All these options are powered by the big open community project [[https://www.debian.org/][Debian]], which is
+a long-term power horse for [[https://www.spi-inc.org/][Software in the Public Interest]].
+
+* Old hardware
+Debian GNU/Linux can run on a lot of old hardware architectures with their
+stable, old-stable and old-old-stable long-term release models.
+There is a variant of Debian specifically meant to support older x86-64 hardware
+like laptops called [[https://antixlinux.com/][AntiX Linux]].
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

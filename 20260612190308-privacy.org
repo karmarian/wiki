@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       40e9cc38-ea86-4cf5-aea5-275873c26885
+:END:
+#+title: Privacy
+
+There is no freedom without privacy, because privacy is a fundamental human
+right to preserve free speech and protection from the gouvernment and big
+companies.
+As there is no true [[https://en.wikipedia.org/wiki/Security_through_obscurity][Security through obscurity]], there is also no privacy without
+[[id:632e3870-2dc8-44bd-b878-979c0072187c][Free Software]].
+
+* Campaigns
+- [[https://www.eff.org/][Electronic Frontier Foundation]]
+- [[https://fsfe.org/activities/publiccode/publiccode.en.html][Public Money, Public Code]]
+- [[https://fsfe.org/activities/deviceneutrality/index][Device Neutrality]]
+- [[https://fsfe.org/activities/routers/routers.en.html][Router Freedom]]
+- [[https://fsfe.org/activities/android/android.en.html][Free Your Android]]
+- [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

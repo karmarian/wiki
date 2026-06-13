@@ -3,8 +3,16 @@
 :END:
 #+title: Wiki
 
-* Version control systems
+* Freedom
+- [[id:632e3870-2dc8-44bd-b878-979c0072187c][Free Software]]
+- [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
+- [[id:40e9cc38-ea86-4cf5-aea5-275873c26885][Privacy]]
+
+* Reproducibility
 - [[id:7a6aaf31-f180-409d-ba9f-5fb029ea72d5][Git]]
+- [[id:d777eae1-c4ee-4783-9aa2-97c6386d01d0][Nix]]
+- [[id:2bbe047b-6643-4021-96e3-83829f2c5a66][Guix]]
+- [[id:76baca70-2204-4c41-a5e2-96c2d9320255][Distrobox]]
 
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>

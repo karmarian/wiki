@@ -68,3 +68,8 @@ This [[https://gitlab.com/karmarian/nix-modules][Nix configuration and modules]]
 modules for users of npins/Flakes and Home-Manager/System configuration/wrapper
 in a hopefully less opinionated way.
 The goal is to have the freedom to use the tools however it is desired.
+
+* License
+SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0
