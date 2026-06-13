@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       76baca70-2204-4c41-a5e2-96c2d9320255
+:END:
+#+title: Distrobox
+
+[[https://distrobox.it/][Distrobox]] can be used to install packages not available on the host distribution
+in use in a clean way without extra isolation.
+Efficiency and integration is seemless and it's also conveniant for software
+development purposes.
+It's not designed to increase the security of system like classical container
+technology.
+It's more similar to Singularity/Apptainer and portable Systemd containers, but
+used a lot for non-bussiness purposes on a lot of distributions.

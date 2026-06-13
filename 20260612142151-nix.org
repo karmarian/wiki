@@ -1,0 +1,70 @@
+:PROPERTIES:
+:ID:       d777eae1-c4ee-4783-9aa2-97c6386d01d0
+:END:
+#+title: Nix
+
+Nix is a functional programming language to describe derivations like build
+recipes with reproducibility in mind right from the beginning.
+There is also the build and deployment tool Nix, which is an advanced package
+manager to build packages, environments or systems.
+Inputs can be locked to define reproducible outputs powered by sandboxed builds.
+Everything can be stored in a read-only, immutable ~nix-store~ and by design
+this supports rollbacks to previous iterations and pure evaluations are possible
+to prevent the need to re-build packages.
+The language and the package manager can be also used as the base for a
+GNU/Linux distribution called Nix OS.
+
+* Nix package manager and Nixpkgs repository
+The Nix package manager can be used to imperatively install and remove packages
+like other package managers as well.
+It was early in features like reproducible builds and rollbacks.
+Declarative approaches for building packages, environments and systems are
+widely spread and the pure and ideological approach of Nix made it beautiful and
+complicated to switch to its rules and thinking.
+There is also the [[https://lix.systems/][Lix]] package manager based on Nix made by the community as an
+alternative to the more corporate focused parts of the Nix ecosystem.
+
+Official repository with ~unstable~ and release branches every six months.
+There are a lot of packages and this is caused by the ease of use, the lean and
+clean options to patch upstream code and the open community.
+Another example of community collaboration can found in the growth of the
+[[https://github.com/nix-community][nix-community]] projects.
+That said, there is also a lot of fragmentation and different interests.
+There are companies, which provide Long-Term-Support for packages in ~nixpkgs~
+to make it more attractive for bussiness use-cases, because the stability
+guarantees might not be the same as with Enterprise Linux distributions or
+Debian GNU/Linux.
+There is a massive amount of multi-arch packages for x86_64-linux,
+aarch64-linux as well as Mac OS Darwin systems.
+Older 32-Bit architectures and potentially RiscV might also be available with
+less packages.
+
+* Nix OS
+Nix OS is a GNU/Linux distribution which can be build and deployed reproducible
+and declarative in a lot of different formats.
+
+The system configuration can be based on a single ~configuration.nix~ file,
+which includes generated hardware configurations from the installation process
+or a ~flake.nix~ can be used to declare mutliple systems using the same locked
+inputs.
+Locking of input sources can be also done using [[https://github.com/nmattia/niv][Niv]] or the potential successor
+[[https://github.com/andir/npins][Npins]].
+There are a lot of options and possibilities, but this is also true for the
+diversity of Flake based frameworks for the good, the bad and the ugly.
+
+The community project [[https://github.com/nix-community/home-manager][Home-Manager]] can be used to declare a home user
+configuration as a more advanced option to dotfile management or solutions like
+[[id:76baca70-2204-4c41-a5e2-96c2d9320255][Distrobox]] or [[https://flatpak.org/][Flatpak]] to install software specifically for users with declarative
+options.
+Sometimes [[https://github.com/nix-community/home-manager][Home-Manager]] feels like the best and most important improvement due to
+the Nix ecosystem, because it can be used almost everywhere to take your
+environment everywhere.
+However, sometimes it is just to much complexity, fragile and unclean, which can
+be frustrating when it gets in your way.
+Therefor, a KISS solution like GNU ~stow~ for dotfiles in combination with the
+power of [[id:7a6aaf31-f180-409d-ba9f-5fb029ea72d5][Git]] can make things easier.
+
+This [[https://gitlab.com/karmarian/nix-modules][Nix configuration and modules]] repository tries to implement different
+modules for users of npins/Flakes and Home-Manager/System configuration/wrapper
+in a hopefully less opinionated way.
+The goal is to have the freedom to use the tools however it is desired.

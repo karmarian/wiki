@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       2bbe047b-6643-4021-96e3-83829f2c5a66
+:END:
+#+title: Guix
+
+[[https://guix.gnu.org/][Guix]] is a package manager and system configuration tool based on the [[id:d777eae1-c4ee-4783-9aa2-97c6386d01d0][Nix]] package
+manager.
+It serves similar goals like reproducible builds or packages, environments and
+systems.
+There is also the Guix System, which is the corresponding advanced distribution
+like Nix OS.
+It's more focused of free software guidelines and bootstrappable source code for
+all components to make the system even more hackable and suited for scientific
+use-cases, especially on high performance clusters.
+
+The documentation is written quite nicely to get an in depth view on the
+possibilities and how to do it.
+This is also necessary, because this is a very small community compared to
+mainstream distributions.
+It's quite impressive to see how much packages are available in Guix for
+different architectures though.
+A good starting point are also the blog entries, code examples and videos by
+David Wilson at [[https://systemcrafters.net/craft-your-system-with-guix/][SystemCrafters]].
