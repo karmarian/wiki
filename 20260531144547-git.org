@@ -4,6 +4,70 @@
 #+title: Git
 
 * Version control for coding projects
+Using version control for coding projects is an essential tool to travel back in
+time, preserve the development history and documentation of implementation
+steps.
+With Git as the source control management utility,
+[[https://en.wikipedia.org/wiki/Linus_Torvalds][Linus Torvalds]] invented a tool for distributed workflows for collaboration
+world-wide.
+It is very versatile from offline development to complex build and deploy
+pipelines for Big Tech "open-source" products.
+
+** Branching models
+Branches are cheap and the key to achieve most workflows efficiently.
+There is often a single ~main~ branch, which is used as the single point for all
+Merge Requests from feature branches in the end for simple and lean workflows.
+In addition, a ~develop~ branch or similar might be used for the current state
+of development.
+There are a lot of projects with ~stable~, ~testing~, ~unstable~ and
+~experimental~ trees, which might be used as release branches.
+These names are used by the [[https://www.debian.org/][Debian]] project, just to mention an awesome community
+project here for no specific reason.
+There might be branches for bugfixes/hotfixes as well and there is no limit to
+the creativity to implement workflows using branching schemes.
+However, not everything might be efficient and a simple approach with a
+rolling release model and focused continuous integration tests and deployments
+might be another way.
+
+** Commiting changes
+Commiting changes and documenting these with messages is more straightforward
+and less opinionated.
+Describing the reasons for the changes is more important than listing the actual
+changes in the code, because the latter is already obvious in the ~diff~ of the
+commit.
+The advantage of commiting small changes and pushing them early is to have
+tranparency in the development towards other contributors or colleagues.
+Also work-in-progress commits can be valuable and commits can be
+rebased/squashed later.
+
+** Distribution and synchronisation
+There is no need to rely on Microsoft with GitHub as the server repository.
+The more freedom respecting alternatives would be self-hosting with [[https://forgejo.org/][Forgejo]] or
+Git hosting solutions like [[https://codeberg.org/][Codeberg]] or [[https://about.gitlab.com/][GitLab]].
+For hobby projects without CI/CD, there can also be workflows without the
+necessaty for a dedicated Git-hosting tool.
+Following the KISS credo, it is also possible to create a bare repository on any
+server or even USB disks using:
+#+begin_src shell
+  git init --bare
+#+end_src
+and clone/push/pull as always since Git was designed to be totally distributable
+completly offline.
+Another variant would be to use:
+#+begin_src shell
+  git bundle create project.bundle --all
+  scp project.bundle user@hostname:/path/to/git/bundles/
+#+end_src
+or use rsync to synchronise all bundles and again clone/push/pull as always.
+
+Git is a tool, which can be used in a lot of ways, following different
+strategies and there is already more than enough to read about it or to get a
+summary by an LLM.
+
+** References and ressources
+- [[https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows#ch05-distributed-git][Distributed Workflow Overview]]
+- [[https://sethrobertson.github.io/GitBestPractices/][Best Practices]]
+- [[https://nvie.com/posts/a-successful-git-branching-model/][Git-Flow]]
 
 * Version control for binary documents and files
 - [[id:2f6e69b2-2bfc-47f7-8ad5-bbfe8100fbba][Git-Annex]]
