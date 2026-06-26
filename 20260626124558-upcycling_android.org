@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       be08a870-5da9-400c-9647-f6a9bb584ce9
+:END:
+#+title: Upcycling Android
+
+Billions of smartphones are wasted every year.
+Most of them are fully functional.
+Manufacturers do not provide long-term software updates.
+Mandatory maintenance support improves the situation currently.
+
+On the other side, Google starts to lock-down its app store eco-system like
+Apple, because the latter shows that the pressure is not too high to open the
+access to other parties.
+This results in vendor-lockin and hard dependencies, which breaks [[id:8c32cdfa-a145-4a17-8d71-80e9d480fcdd][Digital
+Independence]].
+Alternative app stores like [[https://f-droid.org/][F-Droid]] are in danger by this development.
+The [[https://auroraoss.com/][Aurora Store]] is an alternative to use the Google PlayStore without a Google
+account.
+
+Android is based on the [[https://source.android.com/][Android Open Source Project]] (AOSP), which is using a
+fork of the Linux kernel.
+In the end, Linux is in a lot of pockets without the knowledge of their owners.
+There are multiple operating systems based on the AOSP, which provide more
+life-time, freedom, privacy or securtiy.
+The Android user interface and services are proprietary products by Google.
+Most of the alternative operating systems are deGoogled and do not use the
+proprietary apps and services by Google by default.
+On some of these operating systems, an alternative implementation of these
+services without some of the privacy flaws is shipped as [[https://github.com/microg][MicroG]].
+The functionality of specific apps might be rated in the community crowdsourced
+compatibility list for deGoogled devices in the [[https://plexus.techlore.tech/][Plexus]] app.
+
+* Campaigns
+- [[https://fsfe.org/activities/upcyclingandroid/][Upcycling Android]]
+- [[https://fsfe.org/activities/android/android.en.html][Free Your Android]]
+- [[https://www.ifixit.com/][IFIXIT]]
+
+* AOSP based mobile operating systems
+** [[https://lineageos.org/][Lineage OS]]
+- Support for a lot of devices
+- Long-term support for old devices possible
+
+** [[https://e.foundation/e-os/][/e/OS]]
+- deGoogled by default
+- Support for a lot of devices
+- microG supported
+
+** [[https://calyxos.org/][Calyx OS]] ([[https://calyxos.org/news/2025/08/01/a-letter-to-our-community/][Release paused]])
+- Focus on user freedom
+- deGoogled by default
+- microG supported
+
+** [[https://grapheneos.org/][Graphene OS]]
+- Strong security
+- Strong privacy
+- deGoogled by default
+- Profiles available
+- microG supported
+- Google dependency due to Pixel hardware (switch to Motorola)
+
+* Smartphones pre-installed with alternative Android
+- [[https://murena.com/smartphones/][Murena]] (Murena OS)
+- [[https://www.fairphone.com/de/fairphone-e-operating-system][Fairphone]] (Murena OS)
+- [[https://volla.online/en/volla-phone/][Volla Phone]] (Volla OS)
+- [[https://www.shift.eco/][Shift]] (Shift OS L)
+- [[https://commown.coop/de/fairphone-fur-privatpersonen/][Commown]] (Rent Smartphones with alternative Android pre-installed)
+
+* [[id:dafe8206-e795-4e8a-885c-6da3df8461e1][GNU/Linux Smartphones]]
+
+* License
+SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

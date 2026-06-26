@@ -4,17 +4,19 @@
 #+title: Free Software
 
 Free software does not have to be free as in free beer.
-It's about user freedom as in libre.
+It's about user freedom often referred as libre from the french translation.
 
 * Free Software Foundation
-There is obviously the mother foundation in the United States, which is the [[https://www.fsf.org/][Free
-Software Foundation]].
+There are a lot of organisations under the umbrella of the Free Software
+Foundation around the whole world.
+The mother foundation in the United States is the [[https://www.fsf.org/][Free Software Foundation]].
 The [[https://fsfe.org/freesoftware/][Four Freedoms]] defined are to use, study, share and improve source code of
 any software/program.
 To guard these principles, several licenses like the [[https://www.gnu.org/licenses/gpl-3.0.en.html][GPL]] were introduced
 together with the [[https://www.gnu.org/licenses/copyleft.en.html][Copyleft]] principle.
-The Free Software Foundation has the goal to spread awareness and bring user
-freedom to the people.
+The Free Software Foundation has the goal to spread awareness, bring user
+freedom to the people and help them to get [[id:8c32cdfa-a145-4a17-8d71-80e9d480fcdd][Digital Independence]] and [[id:40e9cc38-ea86-4cf5-aea5-275873c26885][Privacy]] for
+their piece of mind.
 This is done by sponsoring the [[https://www.gnu.org/][GNU]] project for example, which is used a lot
 especially with things like the gnu-coreutils or the [[https://www.gnome.org/][GNOME]] desktop environment.
 GNU is free software mainly to be used with the Linux kernel in GNU/Linux
@@ -33,9 +35,43 @@ sector and politics like:
 - [[https://www.fsf.org/campaigns/fight-to-repair][Fight to Repair]]
 - [[https://reuse.software/][REUSE Software]]
 
-* [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
+* Apps
+The simple way to find free software is to use the software center used by the
+[[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]] operating system.
+Often this is the [[https://apps.gnome.org/Software/][Gnome Software Center]] for [[https://www.gnome.org/][GNOME]] or
+[[https://apps.kde.org/discover/][KDE Discover]] for [[https://kde.org/][KDE]].
+These software centers often also distribute Flatpaks or Snaps.
+There is also the distribution agnostic app store [[https://flathub.org][FlatHub]], which delivers
+isolated app containers as Flatpaks.
+Especially for Ubuntu users, there is also the [[https://snapcraft.io/][Snap Store]] as an alternative to
+Flatpaks, although this store cannot be distributed and relies on [[https://canonical.com/][Canonical]] with
+some advantages and disadvantages as a result.
+For power users various package management systems are available.
 
-* [[id:8c32cdfa-a145-4a17-8d71-80e9d480fcdd][Digital Independence]]
+There is often an option to filter for free software or to allow only specific
+licenses like GPL.
+Not all GNU/Linux distributions offer FLOSS (Free Libre Open-Source Software)
+only.
+To be sure to strictly only install and use free software, use a
+[[https://www.gnu.org/distros/free-distros.html][Free Gnu/Linux Distribution]] recommended by the [[https://www.gnu.org/][GNU]] project without binary blobs.
+
+** List of software applications
+This list of software is not strictly free software in terms of licensing.
+The graphical applications are meant for users as a starting point for digital
+independence.
+A better list for free software can be found at the
+[[https://directory.fsf.org/wiki/Main_Page][Free Software Directory]].
+
+*** Command Line Interface applications
+- [[https://git-annex.branchable.com/][Git Annex]]
+
+*** Graphical applications
+- [[https://github.com/linuxmint/timeshift][Timeshift]]
+- [[https://apps.gnome.org/PikaBackup/][PikaBackup]]
+- [[https://usebottles.com/][Bottles]]
+- [[https://www.firefox.com][Firefox]]
+- [[https://www.thunderbird.net][Thunderbird]]
+- [[https://www.collaboraonline.com/][Collabora]]
 
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>

@@ -14,16 +14,41 @@ architecture.
 The most popular easy to use distribution is [[https://www.linuxmint.com/][Linux Mint]].
 The community is great and there are a lot of ressources for beginners to help
 with certain issues.
+The user interface is made to be simple and elegant.
+The maintenance effort is reduced compared to most other GNU/Linux
+distributions.
 Everything should run as expected out of the box and even printer drivers should
 run fine without any effort.
 However, in the best case the compatibility of hardware drivers should be a
 reason to consider before buying a hardware for a GNU/Linux machine.
-The user interface is made to be simple and elegant.
-The maintenance effort is reduced compared to most other GNU/Linux
-distributions.
+Information can be found on the [[https://h-node.org/][h-node]] project website.
+
+The most popular software applications are already installed.
+Additional apps can be found in the software manager, which can be used similar
+to the app stores on smartphones.
+There are mainly two options of possible app sources available here.
+On the one hand, the native Linux Mint packages, which provide a good
+integration into the complete operating system and require less memory.
+On the other hand, Flatpaks from the [[https://flathub.org][FlatHub]] store provide newer software
+versions with current features and isolation above the operating system.
+The Flatseal app might be required to allow permissions to read/write files and
+to have access to peripheral hardware like cameras or microphones.
+The search field will give results for everything needed and will also help to
+switch from Windows applications by using aliases for Word, Excel, etc.
+See [[id:632e3870-2dc8-44bd-b878-979c0072187c][Free Software]] for a list of usefull applications.
+
+The most popular Linux Mint edition is with the Cinnamon desktop environment and
+uses Ubuntu under the hood.
+There is an XFCE edition for older and less powerfull hardware.
+These are the two important editions for the start.
+There are features like timestamps, rollbacks and automated updates already
+integrated, which can be modified in the update control center.
 There is also nothing stopping advanced users to run Linux Mint, so there are
 all these diverse options available for using, studying, sharing and improving
 the system in freedom.
+A lot of information is available online:
+- [[https://www.linuxmint.com/documentation.php][Official documentation]]
+- [[https://forums.linuxmint.com/][Linux Mint Forum]]
 
 More current hardware drivers or software might be required for new laptops or
 gaming use-cases.
@@ -32,7 +57,7 @@ also has options for this.
 Ubuntu might be also better, if there is an interrest in self-hosting services,
 because Ubuntu can be used as server operating system.
 
-For users, which do not have a lot of requirements other than browsing, learing
+For users, who do not have a lot of requirements other than browsing, learning
 and chatting, [[https://endlessglobal.com/][Endless OS]] might be an option to consider.
 It is meant to have zero maintenance effort and designed specifically for
 untrained adolescents.
@@ -43,8 +68,12 @@ a long-term power horse for [[https://www.spi-inc.org/][Software in the Public I
 * Old hardware
 Debian GNU/Linux can run on a lot of old hardware architectures with their
 stable, old-stable and old-old-stable long-term release models.
-There is a variant of Debian specifically meant to support older x86-64 hardware
-like laptops called [[https://antixlinux.com/][AntiX Linux]].
+There is a variant of Debian specifically meant to support older x86-64 or
+32-Bit hardware like laptops and tower PCs called [[https://antixlinux.com/][AntiX Linux]].
+Note that 32-Bit hardware will limit the available packages and support will be
+dropped by newer Linux kernel versions.
+
+* [[id:dafe8206-e795-4e8a-885c-6da3df8461e1][GNU/Linux Smartphones]]
 
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>

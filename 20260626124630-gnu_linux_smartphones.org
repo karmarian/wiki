@@ -1,0 +1,140 @@
+:PROPERTIES:
+:ID:       dafe8206-e795-4e8a-885c-6da3df8461e1
+:END:
+#+title: GNU/Linux Smartphones
+
+GNU/Linux smartphones can be devided into two categories.
+The first uses Android under the hood to provide device drivers for hardware
+support and user-space Android blobs for compatibility and processing.
+The second uses a Mainline Linux kernel and relies on rewritten code for every
+component available in the smartphone, i.e. porting the device from scratch,
+which is a lot of work.
+
+There are multiple GNU/Linux distributions and desktop environments available
+for mobile devices.
+The [[https://www.gnome.org/][GNOME]] and [[https://kde.org/plasma-desktop/][KDE Plasma]] desktop environments both have mobile desktop spins and
+provide a lot of basic apps, which work fine on mobile touch-screen devices.
+There are also different native package management options by various parties,
+container technology and options to install Android apps.
+The [[https://linuxphoneapps.org/][Linux Phone Apps]] website provides information about mobile-friendly Linux
+apps.
+
+* Campaigns
+- [[https://librephone.fsf.org/][Librephone]]
+
+* Linux smartphone hardware
+** [[https://jolla.com/][Jolla Phone]]
+- Runs Sailfish OS
+- Jolla Phone with Mediathek SOC
+- Privacy switch
+
+** [[https://puri.sm/products/librem-5/][Librem 5]]
+- Runs Pure OS (Debian based)
+- Mainline Linux kernel
+- 5 physical kill switches
+- Free software focus with a minimum of proprietary software
+- Good hardware support for mainline Linux
+
+** [[https://pine64.org/devices/pinephone/][Pinephone]]
+- Mainline Linux kernel
+- 5 physical kill switches
+- Most mobile GNU/Linux distributions are supported
+- Good hardware support for mainline Linux
+
+** [[https://pine64.org/devices/pinephone_pro/][Pinephone Pro]]
+- Mainline Linux kernel
+- 5 physical kill switches
+- Various mobile GNU/Linux distributions are supported
+- Good hardware support for mainline Linux
+
+** [[https://furilabs.com/][Fury Phone]]
+- Android phone with Mediathek SOC
+- Runs Fury OS (Debian based)
+- Three physical kill switches
+
+** [[https://volla.online/en/devices/][Volla Phone]]
+- Android phone with Mediathek SOC
+- Dual Boot
+- Runs Ubuntu Touch
+
+** [[https://liberux.net/][Liberux]]
+- Crowdfunding
+- Shall run Debian based OS
+
+* Mobile operating systems
+** [[https://sailfishos.org/][Sailfish OS]]
+- Mainly Android phones by Sony in the past and currently Jolla Phone
+- Open-source operating system featuring zypper package manager
+- Proprietary user interface featuring Android AppSupport
+- deGoogled, but MicroG available (disabled by default)
+- License fee required for AppSupport
+- Community ports and devices without Android AppSupport
+- Native Jolla Store for apps and community repositories
+- Uses Halium hardware abstraction layer and Android device drivers
+- Fully functional mobile phone OS
+- Modem, normal audio calls, camera working and useable as daily driver
+- Full disk encryption with LUKS
+- Can be an Android/iOS alternative without too much sacrifices(similar issues as deGoogled Android operating systems)
+- Runs well on the Jolla Phones and legacy Sony e.g. Xperia XA2 (support will
+  end)
+
+** [[https://www.ubuntu-touch.io/][Ubuntu Touch]]
+- Company backed development by [[https://canonical.com/][Canonical]] until they dropped support
+- Now it is supported by the [[https://ubports.com/][Ubports]]
+- Features the convergent [[https://ubports.com/lomiri][Lomiri]] desktop environment
+- Features native clickable apps from the Open Store
+- Libertine containers for Ubuntu desktop apps (mobile-friendliness varies)
+- Waydroid support for some devices
+- Uses libhybris and [[https://halium.org/][Halium]] hardware abstraction layer and Android device
+  drivers
+- Fully functional mobile phone OS
+- Modem, normal audio calls, camera working and some phones are useable as daily
+  driver
+- Can be an Android/iOS alternative without too much sacrifices on some phones
+  (similar issues as deGoogled Android operating systems)
+- Runs well on the Fairphone 5 and Volla Phone 22 
+
+** [[https://postmarketos.org/][Postmarket OS]]
+- Mainline Linux kernel
+- Based on [[https://www.alpinelinux.org/][Alpine Linux]] and it is tried to upstream whenever possible
+- Very lightweight and bootstrappable base, which makes it fast and simple to
+  compile
+- Uses musl C library with the advantages and disadvantages
+- Systemd support was added on top to simplify mobile services
+- Flatpak supported
+- Big community
+- Reverse engineering of device drivers for SOCs for real long-term support
+  without dependencies and limitations due to Android/Google/smartphone
+  manufacturers
+- Almost true GNU/Linux desktop experience and useable as server
+- There are a lot supported devices, but all of them are missing functionalities
+  like sensors
+- Mobile phone functionalities are only available in a limited number of devices
+- Daily driving as a mobile phone means a lot of sacrifices compared to Android
+  or iOS
+- Runs well on the Pinephones, Pixel 3a, OnePlus 6(T), Fairphone 5
+
+** [[https://mobian-project.org/][Mobian]]
+- Mainline Linux kernel
+- Based on [[https://www.debian.org/][Debian]] and the goal is to make itself obsolete by bringing everything
+  upstream
+- A lot of aarch64 packages available by the universal operating system
+- Flatpak supported
+- Big upstream community, but a rather small mobile focused community
+- Products available running Debian by companies comparable to [[https://droidian.org/][Droidian]]
+- Reverse engineering of device drivers for SOCs for real long-term support
+  without dependencies and limitations due to Android/Google/smartphone
+  manufacturers
+- Reuses a lot of patches and documentation by the Postmarket OS community
+- Almost true GNU/Linux desktop experience and useable as server
+- There are a lot supported devices, but all of them are missing functionalities
+  like sensors
+- Mobile phone functionalities are only available in a limited number of devices
+- Daily driving as a mobile phone means a lot of sacrifices compared to Android
+  or iOS
+- Runs well on the Pinephones, Pixel 3a, OnePlus 6(T), Fairphone 5
+
+* License
+SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

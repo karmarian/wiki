@@ -73,6 +73,15 @@ companies.
 The DiDay project is meant as a starting point to get rid of some services one
 at a time, because this can be done quickly without overwhelming users.
 
+Some usefull applications can be found in the [[id:632e3870-2dc8-44bd-b878-979c0072187c][Free Software]] wiki, which do not
+all rely on switching to [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]] like tools for office work e.g. [[https://www.firefox.com][Firefox]],
+[[https://www.thunderbird.net][Thunderbird]] and [[https://www.collaboraonline.com/][Collabora]].
+There are also cloud services like [[https://proton.me/][Proton]], which offer easy, privacy-friendly
+alternatives to complete big-tech solutions.
+For mail, calendar, address and drive, there is [[https://tuta.com/][Tuta]] and for a focus on mail and
+calendars, there are [[https://posteo.de/][Posteo]] and [[https://login.mailbox.org/][Mailbox]].
+A completely self-hosted cloud solution can be realised using [[https://nextcloud.com/][Nextcloud]].
+
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
 
