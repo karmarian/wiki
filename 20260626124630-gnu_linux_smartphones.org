@@ -84,7 +84,7 @@ apps.
 - Features the convergent [[https://ubports.com/lomiri][Lomiri]] desktop environment
 - Features native clickable apps from the Open Store
 - Libertine containers for Ubuntu desktop apps (mobile-friendliness varies)
-- Waydroid support for some devices
+- Waydroid support for some devices (see [[id:8fe768ea-0c76-411d-97cd-57b2d9d897d2][Ubuntu Touch Share]])
 - Uses libhybris and [[https://halium.org/][Halium]] hardware abstraction layer and Android device
   drivers
 - Fully functional mobile phone OS
@@ -94,7 +94,8 @@ apps.
   (similar issues as deGoogled Android operating systems)
 - Runs well on the Fairphone 5 and Volla Phone 22 
 
-** [[https://postmarketos.org/][Postmarket OS]]
+** [[https://nura.eco/][Nura OS]]
+- formerly known as postmarketOS
 - Mainline Linux kernel
 - Based on [[https://www.alpinelinux.org/][Alpine Linux]] and it is tried to upstream whenever possible
 - Very lightweight and bootstrappable base, which makes it fast and simple to
@@ -125,7 +126,7 @@ apps.
 - Reverse engineering of device drivers for SOCs for real long-term support
   without dependencies and limitations due to Android/Google/smartphone
   manufacturers
-- Reuses a lot of patches and documentation by the Postmarket OS community
+- Reuses a lot of patches and documentation by the Nura OS community
 - Almost true GNU/Linux desktop experience and useable as server
 - There are a lot supported devices, but all of them are missing functionalities
   like sensors

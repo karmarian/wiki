@@ -29,6 +29,8 @@ On some of these operating systems, an alternative implementation of these
 services without some of the privacy flaws is shipped as [[https://github.com/microg][MicroG]].
 The functionality of specific apps might be rated in the community crowdsourced
 compatibility list for deGoogled devices in the [[https://plexus.techlore.tech/][Plexus]] app.
+To search for available Android alternatives for a specific device, [[https://www.sustaphones.com/][sustaphones]]
+might be a good starting point.
 
 * Campaigns
 - [[https://fsfe.org/activities/upcyclingandroid/][Upcycling Android]]
@@ -45,7 +47,7 @@ compatibility list for deGoogled devices in the [[https://plexus.techlore.tech/]
 - Support for a lot of devices
 - microG supported
 
-** [[https://calyxos.org/][Calyx OS]] ([[https://calyxos.org/news/2025/08/01/a-letter-to-our-community/][Release paused]])
+** [[https://calyxos.org/][Calyx OS]]
 - Focus on user freedom
 - deGoogled by default
 - microG supported

@@ -1,0 +1,264 @@
+:PROPERTIES:
+:ID:       8fe768ea-0c76-411d-97cd-57b2d9d897d2
+:END:
+#+title: Ubuntu Touch Share
+
+Note: This document is a draft written by Lumo (the Proton AI assistant) on
+2026-10-23, summarizing a working session on a Fairphone 5 running Ubuntu Touch
+with Waydroid and the Nix package manager.
+It documents the final working solutions and the caveats discovered along the
+way, without the full debugging history.
+
+** Status of this document
+
+- git-annex over SSH: working, solution in daily use.
+- Waydroid shared folders via bind mounts: abandoned — see the notes on the
+  fundamental blocker belowsee.
+- Files are transferred to/from Waydroid with LocalSend instead.
+- The systemd service and script below are the final versions used; they were
+  disabled during cleanup.
+- They are kept here for reference and for the retry/ordering patterns, which
+  apply to any UT boot-time service living in =/home=.
+
+** Environment
+
+| Component | Value                                                          |
+|-----------+----------------------------------------------------------------|
+| Device    | Fairphone 5                                                    |
+| OS        | Ubuntu Touch (read-only rootfs, writable paths under /userdata) |
+| Android   | Waydroid container, Android 11+ (LineageOS-based image)        |
+| Packages  | Nix (single-user profile under =/home/phablet/.nix-profile=)   |
+| Host user | =phablet=, UID 32011                                           |
+| Data      | =/home= is a bind mount of =/userdata/user-data= (ext4)         |
+
+** Fixing git-annex push over SSH with Nix-installed git
+
+*** Problem
+
+Pushing to a git repository on the phone over SSH fails with:
+
+#+begin_example
+bash: line 1: git-receive-pack: command not found
+fatal: Could not read from remote repository.
+#+end_example
+
+The SSH daemon runs remote commands in a non-interactive shell whose =minimal
+PATH= does not include the Nix profile, and Ubuntu Touch ships no system git in
+=/usr/bin=.
+
+*** Solution A: per-remote helper paths (chosen)
+
+On the desktop, configure the remote to invoke the helpers by absolute path on
+the phone:
+
+#+begin_src bash
+  git config remote.<name>.uploadpack
+  /home/phablet/.nix-profile/bin/git-upload-pack git config
+  remote.<name>.receivepack /home/phablet/.nix-profile/bin/git-receive-pack
+#+end_src
+
+=uploadpack= is needed for fetch/clone, =receivepack= for push.
+This covers git-annex sync as well, since it uses the same transport.
+
+*** Solution B: PATH for non-interactive SSH shells (general fix)
+
+sshd executes remote commands via the login shell from =/etc/passwd= (bash on
+UT, which Debian/Ubuntu patch to source =.bashrc= even
+non-interactively).
+Putting this above any interactivity guard at the very top of the phone's
+=~/.bashrc= makes Nix tools available to every remote command (=rsync --server=,
+=borg serve=, git helpers, ...):
+
+#+begin_src bash
+  export PATH="$HOME/.nix-profile/bin:$PATH"
+#+end_src
+
+Note that Ubuntu/Debian =.bashrc= files commonly start with an early return for
+non-interactive shells; the export must come before that guard to take effect.
+
+*** Assessment of Solution B
+
+Safe for this use case: only shells of the =phablet= user are affected; cron
+jobs, systemd services and GUI session apps do not read =.bashrc=.
+Shadowing of system tools is essentially irrelevant on UT because the system
+ships almost none of these tools (which is why Nix is there).
+=/home/phablet/.nix-profile/bin= is a profile generation of symlinks; the Nix
+garbage collector respects profile roots, so no dangling PATH entries appear.
+
+** Waydroid shared folders via bind mounts (final versions, disabled)
+
+*** The final script (=/home/phablet/.local/bin/waydroid-mounts.sh=)
+
+#+begin_src bash
+  #!/bin/bash
+  /home/phablet/.local/bin/waydroid-mounts.sh — run as root by systemd
+  Invoked explicitly via: /bin/bash <this file> (exec bit irrelevant)
+
+  set -uo pipefail # deliberately NOT -e: one failed share must not abort the rest
+
+  PHABLET_HOME="/home/phablet" WAYDROID_MEDIA="${PHABLET_HOME}/.local/share/waydroid/data/media/0"
+
+  HOST_UID=32011 # phablet GID_EVERYBODY=9997 # AID_EVERYBODY — in every app's supplementary groups GID_MEDIA_RW=1023 # AID_MEDIA_RW — Android's storage daemon identity
+  setfacl is NOT in the UT image; if installed via Nix, use the full path
+  since the service runs as root without phablet's profile PATH:
+
+  SETFACL="/home/phablet/.nix-profile/bin/setfacl" # or empty to skip
+
+  ACL_SPEC="u:${HOST_UID}:rwx,g:${GID_EVERYBODY}:rwx,g:${GID_MEDIA_RW}:rwx"
+
+  setup_share() { local src="$1" dst="$2" mkdir -p "$src" "$dst" if mountpoint -q "$dst"; then echo "[INFO] already mounted: $dst" elif mount --bind "$src" "$dst"; then echo "[OK] $src -> $dst" else echo "[WARN] bind mount failed: $src -> $dst" >&2 return 1 fi # Ownership is left alone: same inodes as ~/Documents etc., a chown # would rewrite the real home directories. if [ -n "$SETFACL" ] && "$SETFACL" -R -m "$ACL_SPEC" "$dst" 2>/dev/null; then "$SETFACL" -R -d -m "$ACL_SPEC" "$dst" 2>/dev/null || true echo "[OK] ACLs set on $dst" else echo "[WARN] no ACL support here — falling back to world rw" >&2 chmod -R a+rwX "$dst" || true fi }
+
+  setup_share "${PHABLET_HOME}/Documents" "${WAYDROID_MEDIA}/Documents" setup_share "${PHABLET_HOME}/Downloads" "${WAYDROID_MEDIA}/Download" setup_share "${PHABLET_HOME}/Music" "${WAYDROID_MEDIA}/Music" setup_share "${PHABLET_HOME}/Pictures" "${WAYDROID_MEDIA}/Pictures" setup_share "${PHABLET_HOME}/Videos" "${WAYDROID_MEDIA}/Movies"
+
+  echo "[DONE]"
+#+end_src
+
+*** The final systemd unit (=/etc/systemd/system/waydroid-mounts.service=)
+
+#+begin_src conf
+  [Unit]
+  Description=Waydroid shared folder bind mounts for phablet
+  After=home.mount local-fs.target
+  Wants=home.mount
+  Before=waydroid-container.service
+  StartLimitIntervalSec=0
+
+  [Service]
+  Type=oneshot
+  RemainAfterExit=yes
+  ExecStart=/bin/bash /home/phablet/.local/bin/waydroid-mounts.sh
+  Restart=on-failure
+  RestartSec=15
+
+  [Install]
+  WantedBy=multi-user.target
+#+end_src
+
+=/etc/systemd/system= is writable on UT (it is a =synced= writable path, see
+=/etc/system-image/writable-paths=).
+Ordinary =/etc= paths are on the read-only rootfs and cannot be written to.
+
+*** Why the retry logic exists (Ubuntu Touch boot caveat)
+
+Content of =/home= becomes available only ~35–55 s into boot, although
+=home.mount= (an fstab-generated bind of =/userdata/user-data=) exists from
+early on. Measured journal timeline of one boot:
+
+t≈9 s, 25 s, 40 s:
+=bash: .../waydroid-mounts.sh: No such file or directory (exit 127)=
+
+t≈55 s:
+all five binds created, service finishes
+
+Lessons distilled from this:
+
+203/EXEC vs 127: exit code 203 with no script output means systemd's own
+=execve()= failed (file missing/unreadable/not executable); exit 127 means the
+interpreter ran but could not find the script.
+After switching to =ExecStart=/bin/bash <script>=, the failure mode moved from
+the misleading 203 to an actionable 127.
+RequiresMountsFor=/home/phablet= is useless here: the mount unit exists and the
+dependency is honoured, but "mounted" does not mean "populated".
+Only explicit =After=home.mount= plus restart-on-failure reliably converges.
+StartLimitIntervalSec= belongs in =[Unit]=, not =[Service]== (UT's systemd
+version rejects it in =[Service]==).
+=Restart=on-failure= is permitted for =Type=oneshot= (unlike =always=).
+Executing via =/bin/bash <script>= removes the exec-bit and shebang variables
+entirely; the script only needs to be readable.
+Moving the script off /home= does not help and is impossible anyway (read-only
+rootfs except for writable-paths entries): the script's own source directories
+live in =/home=, so =/home= readiness is a prerequisite regardless.
+systemd's =RequiresMountsFor== resolves against the mount table; UT establishes
+some mounts outside systemd's knowledge, so explicit unit names are more
+trustworthy.
+
+** Why bind-mount sharing was abandoned
+
+The host side was flawless: all five binds existed, LXC's =rbind= of the data
+tree carried them into the container, and the content was visible at
+=/data/media/0/= inside Android.
+The blocker is Android itself:
+
+- On Android 11+ (the Waydroid image's LineageOS base), =/sdcard= is served by
+  the MediaProvider FUSE daemon on =/storage/emulated=.
+- That FUSE layer does not follow submounts placed inside =/data/media/0=: apps
+  and file managers see the stale, masked directories beneath the bind mounts
+  instead of the mounted content. (Documented upstream in Waydroid discussion
+  #1107; it affects the official "Setting up a shared folder" recipe.)
+- Container restarts, media rescans, and re-ordering of mounts do not change
+  this; the FUSE daemon simply never crosses the submount.
+- The exceptions are =/storage/emulated/0/Android/data= and =Android/obb=, which
+  are direct ext4 binds inside the container — a shared folder there
+  (e.g. inside a document-provider app's data directory) is visible to apps that
+  use SAF document providers.
+
+Chosen alternative: transfer files with LocalSend, which needs no mount tricks
+at all.
+
+Documented alternatives that would keep two-way sharing, for future reference:
+
+- Inverted mount: instead of pushing =$HOME= directories into the media tree,
+  bind an Android media directory
+  (e.g. =/.local/share/waydroid/data/media/0/Documents=) up to the host at
+  =/Documents=.
+- Android keeps serving an ordinary directory; the caveat is that
+  the canonical copy then lives inside Waydroid's data tree and a Waydroid reset
+  would destroy it.
+- phablet needs supplementary membership in group 1023 (=media_rw=) for this,
+  since those directories are =10121:1023 drwxrws---=.
+
+Document-provider route: bind a host directory into an app's
+=Android/data/<package>/files/= tree (Termux, RCX) and access it via the app's
+SAF interface.
+
+** Permission cheat sheet (UT + Waydroid)
+
+* Permission cheat sheet (UT ↔ Waydroid)
+
+| Identity   | Value  | Meaning                                                      |
+|------------+--------+--------------------------------------------------------------|
+| phablet    | 32011  | UT host user                                                 |
+| system     | 1000   | Android system                                               |
+| u0_a<N>    | 10xxx  | Android app UIDs (e.g. u0_a134 = 10134)                      |
+| media_rw   | 1023   | Android storage daemon / media group                         |
+| everybody  | 9997   | AID_EVERYBODY, shared by all apps; phablet is member         |
+| sdcard_rw  | 1015   | Legacy external storage write group                          |
+
+phablet already carries many Android-native groups (see =id=), including 9997,
+1015, 1013 — deliberate interop design by UT.
+A file inside Waydroid's media tree written by an app shows up on the host owned
+by the writing app's UID with group 1023.
+UT's =/home= is ext4; POSIX ACLs are supported but =setfacl= is not shipped —
+install =nix-env -iA nixpkgs.acl= and reference the binary by full path from
+root-run services.
+
+** Cleanup performed when abandoning the bind-mount approach
+
+#+begin_src bash
+  Disable and remove the service
+
+  sudo systemctl disable --now waydroid-mounts.service sudo rm /etc/systemd/system/waydroid-mounts.service rm ~/.local/bin/waydroid-mounts.sh sudo systemctl daemon-reload
+  Remove the bind mounts (each appears twice via /home and /userdata
+  views of the same mount; one umount per target removes it)
+
+  sudo umount ~/.local/share/waydroid/data/media/0/{Documents,Download,Music,Pictures,Movies}
+  Restore home directory ownership and sane modes
+
+  sudo chown -R phablet:phablet ~/Documents ~/Downloads ~/Music ~/Pictures ~/Videos sudo chmod -R g-s,o-w ~/Documents ~/Downloads ~/Music ~/Pictures ~/Videos
+  Optionally clear leftover POSIX ACLs (requires Nix-installed acl)
+
+  /home/phablet/.nix-profile/bin/setfacl -R -b ~/Documents ~/Downloads ~/Music ~/Pictures ~/Videos
+  Optionally remove test files and the acl package
+
+  rm ~/Documents/from_host_test.txt nix-env -e acl
+#+end_src
+
+Left in place: the real Android media directories under
+=/.local/share/waydroid/data/media/0/= (they are Waydroid's native storage) and
+the git-annex repository in =/Documents=, which was never affected by any of
+this.
+
+* License
+SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0

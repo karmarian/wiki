@@ -16,6 +16,9 @@
 - [[id:2bbe047b-6643-4021-96e3-83829f2c5a66][Guix]]
 - [[id:76baca70-2204-4c41-a5e2-96c2d9320255][Distrobox]]
 
+* AI-Assisted Writing
+This wiki is written by a human with a few minor exceptions, which are noted.
+
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
 
