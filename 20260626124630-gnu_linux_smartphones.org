@@ -94,7 +94,8 @@ apps.
   (similar issues as deGoogled Android operating systems)
 - Runs well on the Fairphone 5 and Volla Phone 22 
 
-** [[https://postmarketos.org/][Postmarket OS]]
+** [[https://nura.eco/][Nura OS]]
+- formerly known as postmarketOS
 - Mainline Linux kernel
 - Based on [[https://www.alpinelinux.org/][Alpine Linux]] and it is tried to upstream whenever possible
 - Very lightweight and bootstrappable base, which makes it fast and simple to
@@ -125,7 +126,7 @@ apps.
 - Reverse engineering of device drivers for SOCs for real long-term support
   without dependencies and limitations due to Android/Google/smartphone
   manufacturers
-- Reuses a lot of patches and documentation by the Postmarket OS community
+- Reuses a lot of patches and documentation by the Nura OS community
 - Almost true GNU/Linux desktop experience and useable as server
 - There are a lot supported devices, but all of them are missing functionalities
   like sensors
