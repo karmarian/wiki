@@ -17,6 +17,16 @@ As there is no true [[https://en.wikipedia.org/wiki/Security_through_obscurity][
 - [[https://fsfe.org/activities/android/android.en.html][Free Your Android]]
 - [[id:507abdf6-b785-4b29-9271-c365c5fe1a6c][GNU/Linux]]
 
+* Tools
+- [[https://coveryourtracks.eff.org/][Test your Browser]]
+- [[https://support.torproject.org/tor-browser/][Tor Browser]]
+- [[https://brave.com/][Brave Browser]]
+- [[https://mullvad.net/en][Mullvad VPN/Browser]]
+- [[https://privacybadger.org/][Privacy Badger Browser Plugin]]
+- [[https://github.com/gorhill/uBlock][uBlock Origin Content Blocker]]
+- [[https://signal.org/][Signal Messenger]]
+- [[id:276422f0-d264-4584-9317-07003e617a4a][Email Self-Defense]]
+
 * License
 SPDX-FileCopyrightText: 2025 karmar <karmar@posteo.de>
 
