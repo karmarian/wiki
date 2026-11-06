@@ -17,6 +17,20 @@
 #     If several match, the oldest (lowest timestamp) wins; the others
 #     remain ordinary wiki pages.
 #
+# Languages / translations:
+#   * The note language is taken from #+language: (default: "en").
+#   * A roam link between two blog notes of DIFFERENT languages declares
+#     them as translations of each other — e.g. the English article
+#     links to [[id:<german-note>][Deutsche Version]] as usual in
+#     org-roam, and the site pairs them automatically.
+#   * Translations are emitted using Zola's multilingual convention:
+#     the English page becomes content/blog/<en-stem>.md and its German
+#     counterpart content/blog/<en-stem>.de.md (the EN note's stem
+#     carries the pair). Templates get page.translations to build the
+#     language-switch button. German pages are excluded from the
+#     English section listings; they are reachable via the switch
+#     button (and the language-specific section index).
+#
 # Roam links [[id:...]] are resolved via :ID: drawers across BOTH
 # sections. IMPORTANT: Zola only rewrites links to page permalinks when
 # they use its @/ internal-link scheme — but pandoc mangles org links
@@ -51,6 +65,8 @@ GITLAB_PROFILE = "https://gitlab.com/karmarian"
 GITHUB_PROFILE = "https://github.com/karmarian"
 SOURCE_REPO = "https://gitlab.com/karmarian/wiki"
 
+DEFAULT_LANG = "en"
+
 
 def esc_toml(s):
     return s.replace("\\", "\\\\").replace('"', '\\"')
@@ -76,6 +92,7 @@ def is_overview(stem):
 id_re = re.compile(r":ID:\s*([0-9a-zA-Z-]+)")
 tags_re = re.compile(r"^\s*#\+filetags:\s*(.+?)\s*$", re.M)
 title_re = re.compile(r"^\s*#\+title:\s*(.+?)\s*$", re.M)
+lang_re = re.compile(r"^\s*#\+language:\s*(\S+)\s*$", re.M)
 
 id_map = {}
 note_meta = {}
@@ -83,12 +100,14 @@ for org in org_files:
     text = org.read_text(encoding="utf-8")
     tm = title_re.search(text)
     gm = tags_re.search(text)
+    lm = lang_re.search(text)
     tags = ([t for t in gm.group(1).strip().strip(":").split(":") if t]
             if gm else [])
     note_meta[org.stem] = {
         "title": tm.group(1) if tm else org.stem,
         "blog": "blog" in tags,
         "overview": is_overview(org.stem),
+        "lang": lm.group(1).lower() if lm else DEFAULT_LANG,
     }
     im = id_re.search(text)
     if im:
@@ -107,6 +126,29 @@ if len(overview_candidates) > 1:
         ),
         file=sys.stderr,
     )
+
+# ---- pass 1.5: translation pairing -----------------------------------------
+# A roam link between two blog notes of different languages declares a
+# translation pair. Run over all notes first so pairing is independent
+# of processing order.
+raw_id_re = re.compile(r"\[\[id:([0-9a-zA-Z-]+)")
+translation_of = {}
+for org in org_files:
+    s = org.stem
+    ms = note_meta[s]
+    if not ms["blog"]:
+        continue
+    for ident in raw_id_re.findall(org.read_text(encoding="utf-8")):
+        t = id_map.get(ident)
+        if t is None or not note_meta[t]["blog"]:
+            continue
+        if note_meta[t]["lang"] != ms["lang"]:
+            translation_of[s] = t
+            translation_of[t] = s
+
+# Languages that actually occur among blog posts (besides the default).
+blog_langs = sorted({note_meta[s]["lang"]
+                     for s in blog_set if note_meta[s]["lang"] != DEFAULT_LANG})
 
 
 # ---- pass 2: link rewriting (pre-pandoc) ------------------------------------
@@ -162,6 +204,15 @@ def fix_internal(m):
     return "](@/" + target + (anchor or "") + ")"
 
 
+def blog_filename(stem, lang):
+    # Translations share the DEFAULT-language note's stem so Zola pairs
+    # them (<stem>.md + <stem>.de.md). An unpaired translation keeps its
+    # own stem.
+    if lang == DEFAULT_LANG:
+        return stem + ".md"
+    return translation_of.get(stem, stem) + "." + lang + ".md"
+
+
 n_blog = n_wiki = n_overview = 0
 for org in org_files:
     stem = org.stem
@@ -189,23 +240,25 @@ for org in org_files:
         chunks[i] = internal_re.sub(fix_internal, chunks[i])
     md = "```".join(chunks)
 
+    fm = '+++\ntitle = "' + esc_toml(meta["title"]) + '"\n'
+    if date:
+        fm = fm + "date = " + date + "\n"
+    fm = fm + 'template = "page.html"\ndraft = false\n+++\n\n'
+
     if stem == overview_stem:
         # The overview note heads the wiki section.
         fm = ('+++\ntitle = "Wiki"\nsort_by = "title"'
               + '\ntemplate = "section.html"\n+++\n\n')
         (content / "wiki" / "_index.md").write_text(fm + md, encoding="utf-8")
         n_overview += 1
+    elif meta["blog"]:
+        (content / "blog" / blog_filename(stem, meta["lang"])).write_text(
+            fm + md, encoding="utf-8"
+        )
+        n_blog += 1
     else:
-        fm = '+++\ntitle = "' + esc_toml(meta["title"]) + '"\n'
-        if date:
-            fm = fm + "date = " + date + "\n"
-        fm = fm + 'template = "page.html"\ndraft = false\n+++\n\n'
-        if meta["blog"]:
-            (content / "blog" / (stem + ".md")).write_text(fm + md, encoding="utf-8")
-            n_blog += 1
-        else:
-            (content / "wiki" / (stem + ".md")).write_text(fm + md, encoding="utf-8")
-            n_wiki += 1
+        (content / "wiki" / (stem + ".md")).write_text(fm + md, encoding="utf-8")
+        n_wiki += 1
 
 # Section indexes
 (content / "blog" / "_index.md").write_text(
@@ -213,6 +266,14 @@ for org in org_files:
     'template = "section.html"\n+++\n',
     encoding="utf-8",
 )
+# Per-language section indexes, so translated pages have a proper parent
+# section (they stay out of the EN listings via the lang filter).
+for lg in blog_langs:
+    (content / "blog" / ("_index." + lg + ".md")).write_text(
+        '+++\ntitle = "Blog (' + lg.upper() + ')"\nsort_by = "date"\n'
+        'template = "section.html"\n+++\n',
+        encoding="utf-8",
+    )
 (content / "_index.md").write_text(
     '+++\ntitle = "Home"\ntemplate = "index.html"\n+++\n',
     encoding="utf-8",
@@ -276,6 +337,13 @@ base_css = """
     footer { border-top: 1px solid var(--line); color: var(--muted);
              text-align: center; padding: 1rem; font-size: 0.85rem;
              margin-top: 2rem; }
+    /* language-switch pills on translated articles */
+    .langs { margin: .2rem 0 1rem; }
+    .lang-btn { display: inline-block; padding: .15rem .7rem;
+                border: 1px solid var(--accent); border-radius: 999px;
+                color: var(--accent); text-decoration: none;
+                font-size: .8rem; letter-spacing: .08em; }
+    .lang-btn:hover { background: var(--accent); color: var(--on-accent); }
 """
 
 (tpl / "base.html").write_text(
@@ -326,11 +394,14 @@ listing = (
     "{{ section.content | safe }}\n"
     "<ul>\n"
     "{% for page in section.pages %}\n"
+    # keep translations out of the default-language listings
+    "  {%- if page.lang == '" + DEFAULT_LANG + "' %}\n"
     "  <li>\n"
     '    {%- if page.date %}<time class="muted">'
     '{{ page.date | date(format="%Y-%m-%d") }}</time> — {% endif -%}\n'
     '    <a href="{{ page.permalink }}">{{ page.title }}</a>\n'
     "  </li>\n"
+    "  {% endif %}\n"
     "{% endfor %}\n"
     "</ul>\n"
     "{% endblock content %}\n"
@@ -345,6 +416,15 @@ listing = (
     "{% block content %}\n"
     "<article>\n"
     "  <h1>{{ page.title }}</h1>\n"
+    # language-switch pills: link to every translated version
+    "  {%- if page.translations %}\n"
+    '  <nav class="langs">\n'
+    "    {% for tr in page.translations %}\n"
+    '    <a class="lang-btn" href="{{ tr.permalink }}">'
+    "{{ tr.lang | upper }}</a>\n"
+    "    {% endfor %}\n"
+    "  </nav>\n"
+    "  {%- endif %}\n"
     '  {%- if page.date %}<p class="muted"><time>'
     '{{ page.date | date(format="%Y-%m-%d") }}</time></p>{% endif -%}\n'
     "  {{ page.content | safe }}\n"
@@ -355,6 +435,7 @@ listing = (
 
 # Front page: intro + newest blog posts (ready for later expansion).
 # NOTE: Tera/Zola has no `slice` filter; cap the loop with loop.index.
+# Translated posts are skipped; only default-language posts are listed.
 (tpl / "index.html").write_text(
     '{% extends "base.html" %}\n'
     "{% block content %}\n"
@@ -366,10 +447,12 @@ listing = (
     "<ul>\n"
     "{% for page in blog.pages %}\n"
     "  {% if loop.index <= 5 %}\n"
+    "  {%- if page.lang == '" + DEFAULT_LANG + "' %}\n"
     "  <li>\n"
     '    <time class="muted">{{ page.date | date(format="%Y-%m-%d") }}</time>\n'
     '    — <a href="{{ page.permalink }}">{{ page.title }}</a>\n'
     "  </li>\n"
+    "  {% endif %}\n"
     "  {% endif %}\n"
     "{% endfor %}\n"
     "</ul>\n"
@@ -380,22 +463,34 @@ listing = (
 )
 
 # ---- config ----------------------------------------------------------------
-(site_dir / "config.toml").write_text(
+config = (
     'base_url = "' + base_url + '"\n'
     + 'title = "' + esc_toml(SITE_TITLE) + '"\n'
+    + 'default_language = "' + DEFAULT_LANG + '"\n'
     + "compile_sass = false\n"
     + "build_search_index = false\n"
     + "generate_feeds = true\n"
     + 'feed_filenames = ["atom.xml"]\n'
-    + "[extra]\n"
+)
+# Register every language that actually occurs so Zola pairs the
+# *.md / *.<lang>.md files as translations.
+for lg in blog_langs:
+    config += (
+        "\n[languages." + lg + "]\n"
+        "generate_feeds = false\n"
+    )
+config += (
+    "\n[extra]\n"
     + 'gitlab_profile = "' + GITLAB_PROFILE + '"\n'
     + 'github_profile = "' + GITHUB_PROFILE + '"\n'
-    + 'source_repo = "' + SOURCE_REPO + '"\n',
-    encoding="utf-8",
+    + 'source_repo = "' + SOURCE_REPO + '"\n'
 )
+(site_dir / "config.toml").write_text(config, encoding="utf-8")
 
 print(
-    "converted {} notes -> {} wiki, {} blog, {} overview ({} roam IDs mapped)".format(
-        len(org_files), n_wiki, n_blog, n_overview, len(id_map)
+    "converted {} notes -> {} wiki, {} blog ({} translations), "
+    "{} overview ({} roam IDs mapped)".format(
+        len(org_files), n_wiki, n_blog, len(translation_of) // 2,
+        n_overview, len(id_map)
     )
 )
