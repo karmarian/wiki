@@ -222,30 +222,57 @@ for org in org_files:
 tpl = site_dir / "templates"
 tpl.mkdir(exist_ok=True)
 
+# Accent color: forest green, LaTeX-style
+#   \definecolor{accent}{HTML}{2E5C55}  ->  #2E5C55
+# Used for the banner background and page headings; links take a slightly
+# lighter tint so body copy stays legible against the paper-white body.
 base_css = """
-    :root { --ink:#24292f; --muted:#57606a; --accent:#6d4aff; --line:#d0d7de; }
+    :root {
+      --ink: #24292f;
+      --muted: #57606a;
+      --line: #d0d7de;
+      --paper: #fdfdfc;
+      --accent: #2E5C55;
+      --accent-light: #4a7d74;
+      --on-accent: #f5f8f7;
+      --on-accent-muted: rgba(245, 248, 247, 0.75);
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; color: var(--ink);
+    body { margin: 0; color: var(--ink); background: var(--paper);
            font: 16px/1.6 system-ui, -apple-system, sans-serif; }
-    a { color: var(--accent); }
+    a { color: var(--accent-light); }
+    a:hover { color: var(--accent); }
+    /* headings carry the accent color */
+    h1, h2, h3 { color: var(--accent); font-weight: 650; }
     h1 { border-bottom: 1px solid var(--line); padding-bottom: .3rem; }
+    /* banner: forest-green band */
     .banner { display: flex; flex-wrap: wrap; gap: 1rem;
               align-items: baseline; justify-content: space-between;
-              padding: 1rem 1.5rem; border-bottom: 2px solid var(--line); }
+              padding: 1rem 1.5rem;
+              background: var(--accent);
+              border-bottom: 2px solid #234740; }
     .banner .brand { font-weight: 700; font-size: 1.1rem;
-                     text-decoration: none; color: var(--ink); }
-    .banner nav a { margin-right: 1rem; text-decoration: none; }
+                     letter-spacing: .04em;
+                     text-decoration: none; color: var(--on-accent); }
+    .banner nav a { margin-right: 1rem; text-decoration: none;
+                    color: var(--on-accent-muted); }
+    .banner nav a:hover { color: var(--on-accent); }
     .banner .social { font-size: 0.9rem; }
     .banner .social a { margin-left: 1rem; text-decoration: none;
-                        color: var(--muted); }
+                        color: var(--on-accent-muted); }
+    .banner .social a:hover { color: var(--on-accent); }
     main { max-width: 46rem; margin: 0 auto; padding: 1.5rem; }
     .muted { color: var(--muted); font-size: 0.9rem; }
-    code, pre { background: #f6f8fa; border-radius: 4px; }
+    code, pre { background: #f2f5f4; border-radius: 4px; }
     code { padding: .15em .35em; }
-    pre { padding: 1rem; overflow-x: auto; }
+    pre { padding: 1rem; overflow-x: auto;
+          border-left: 3px solid var(--accent); }
     pre code { padding: 0; background: none; }
     table { border-collapse: collapse; }
+    th { background: #eef2f1; }
     th, td { border: 1px solid var(--line); padding: .4rem .6rem; }
+    blockquote { border-left: 3px solid var(--accent);
+                 margin-left: 0; padding: 0 1rem; color: var(--muted); }
     footer { border-top: 1px solid var(--line); color: var(--muted);
              text-align: center; padding: 1rem; font-size: 0.85rem;
              margin-top: 2rem; }
@@ -255,6 +282,7 @@ base_css = """
     '<!DOCTYPE html>\n<html lang="en">\n  <head>\n'
     '    <meta charset="utf-8">\n'
     '    <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    '    <meta name="theme-color" content="#2E5C55">\n'
     '    <title>{% block title %}'
     + SITE_TITLE
     + '{% endblock title %}</title>\n'
