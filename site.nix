@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 # ============================================================================
 # site.nix — build a Zola static site from the org-roam notes of
 #            https://gitlab.com/karmarian/wiki

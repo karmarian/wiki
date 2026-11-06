@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 #!/usr/bin/env python3
 # ============================================================================
 # org2zola.py — convert org-roam notes into a Zola site skeleton.
