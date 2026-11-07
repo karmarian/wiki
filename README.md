@@ -38,11 +38,34 @@ just regenerate-site
 Users outside the Nix devShell can check the required tools with
 `just init`.
 
+### Deployment
+Deploy the site to the webhost via FTP:
+```shell
+just deploy
+```
+The recipe builds the site, copies it to `.deploy/` with writable
+permissions (the Nix store output is read-only) and mirrors it to the
+`public_html` directory of the webhost.
+The target host can be specified with `FTP_HOST=<host> just deploy`.
+lftp reads the FTP credentials from `~/.netrc` (machine, login,
+password) or prompts for the password interactively if none is stored:
+```
+machine <host>
+login <user>
+password <secret>
+```
+Note that `~/.netrc` must contain the host as given by `FTP_HOST`.
+The production `base_url` is set in `flake.nix` (`baseUrl` argument) and
+must match the deployed domain.
+
 ### Writing notes
 Notes are plain `.org` files with org-roam `:ID:` drawers; roam links
 between notes are resolved to website links at build time.
 Tag a note with `#+filetags: :blog:` to publish it as a blog article,
 otherwise it appears in the wiki section.
+Articles with `#+language: de` that link to their English counterpart
+(via a roam link between two blog notes) are published as translations
+with a language-switch button.
 
 ## AI assistance
 The wiki notes are written mainly without AI assistance, unless noted

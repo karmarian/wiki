@@ -37,7 +37,7 @@
         {
           default = pkgs.callPackage ./site.nix {
             inherit src;
-            baseUrl = "https://karmarian.gitlab.io/wiki/";
+            baseUrl = "https://karmar.org/";
           };
         }
       );
@@ -55,6 +55,7 @@
               pkgs.pandoc
               pkgs.python3
               pkgs.reuse
+              pkgs.lftp
             ];
 
             shellHook = ''

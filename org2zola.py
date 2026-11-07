@@ -1,7 +1,6 @@
+#!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
 # SPDX-License-Identifier: GPL-3.0-or-later
-
-#!/usr/bin/env python3
 # ============================================================================
 # org2zola.py — convert org-roam notes into a Zola site skeleton.
 #
@@ -25,11 +24,10 @@
 #     org-roam, and the site pairs them automatically.
 #   * Translations are emitted using Zola's multilingual convention:
 #     the English page becomes content/blog/<en-stem>.md and its German
-#     counterpart content/blog/<en-stem>.de.md (the EN note's stem
-#     carries the pair). Templates get page.translations to build the
-#     language-switch button. German pages are excluded from the
-#     English section listings; they are reachable via the switch
-#     button (and the language-specific section index).
+#     counterpart content/blog/<en-stem>.de.md. Templates get
+#     page.translations to build the language-switch button. German
+#     pages are excluded from the EN section listings; they are
+#     reachable via the switch button.
 #
 # Roam links [[id:...]] are resolved via :ID: drawers across BOTH
 # sections. IMPORTANT: Zola only rewrites links to page permalinks when
@@ -188,6 +186,9 @@ def rewrite(text):
 
 
 # ---- pass 3: convert -------------------------------------------------------
+# NOTE: SITE_DIR is expected to be empty/nonexistent here; the callers
+# (Justfile recipes, site.nix) remove it beforehand so no stale files
+# from previous converter generations can leak into the build.
 content = site_dir / "content"
 (content / "blog").mkdir(parents=True, exist_ok=True)
 (content / "wiki").mkdir(parents=True, exist_ok=True)
@@ -195,7 +196,7 @@ content = site_dir / "content"
 # Post-pandoc substitution: markdown links written by pandoc as
 # [desc](../wiki/foo.md) or [desc](../wiki/foo.md#anchor) become Zola
 # internal links [desc](@/wiki/foo.md). Plain text surgery — pandoc never
-# touches these.
+# touches these. The closing parenthesis is part of the replacement.
 internal_re = re.compile(r"\]\(\.\./((?:wiki|blog)/[^\s)#]*?\.md)(#[^\s)#]*)?\)")
 
 
