@@ -1,11 +1,6 @@
 version=1
 
 [[annotations]]
-path = "npins/default.nix"
-SPDX-FileCopyrightText = "None"
-SPDX-License-Identifier = "MIT"
-
-[[annotations]]
-path = "npins/sources.json"
+path = "flake.lock"
 SPDX-FileCopyrightText = "None"
 SPDX-License-Identifier = "CC0-1.0"

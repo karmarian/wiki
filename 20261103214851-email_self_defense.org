@@ -1,0 +1,208 @@
+:PROPERTIES:
+:ID:       276422f0-d264-4584-9317-07003e617a4a
+:END:
+#+title: Email Self-Defense
+
+* [[https://emailselfdefense.fsf.org/en/][EMAIL SELF-DEFENSE Guide]]
+
+* Offline GPG Master Key Setup
+One *primary (master) key* kept offline on a USB stick, plus limited
+*subkeys* on the laptop for daily use (email, file encryption, commit
+signing). The primary can only /certify/, so it is never needed for
+daily work --- only for key administration (adding UIDs, signing other
+people's keys, creating/revoking subkeys).
+
+The key material itself is *protected by a passphrase* (gpg prompts for
+it securely via pinentry --- nothing secret is ever typed on the command
+line or lands in the shell history). The USB stick holding the backup
+files is stored unencrypted; the key files themselves remain
+passphrase-protected regardless of where they are copied.
+
+--------------
+
+** Step 1 --- Generate the primary key
+:PROPERTIES:
+:CUSTOM_ID: step-1-generate-the-primary-key
+:END:
+Run the plain command; a pinentry dialog opens and asks you to choose a
+passphrase (and confirm it):
+
+#+begin_src sh
+  gpg --quick-generate-key 'Alice <alice@example.org>' ed25519 cert never
+#+end_src
+
+- =cert= means the primary can *only* certify/sign other keys --- it
+  can't sign emails or encrypt files, so you never need it for daily
+  work.
+- =never= = no expiry on the primary; rotation happens on the subkeys
+  instead.
+- Omitting =--batch= is intentional --- in batch mode gpg aborts rather
+  than prompting for a passphrase interactively.
+
+Capture the fingerprint for the following steps:
+
+#+begin_src sh
+  FPR=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
+  echo "$FPR"
+#+end_src
+
+** Step 2 --- Add subkeys for daily use
+:PROPERTIES:
+:CUSTOM_ID: step-2-add-subkeys-for-daily-use
+:END:
+Pinentry may ask for the primary key's passphrase again (gpg-agent
+usually caches it for a few minutes after Step 1):
+
+#+begin_src sh
+  # encryption subkey (email, files)
+  gpg --quick-add-key "$FPR" cv25519 encr 2y
+
+  # signing subkey (commits, general signing)
+  gpg --quick-add-key "$FPR" ed25519 sign 2y
+#+end_src
+
+The =2y= expiry forces periodic rotation --- if a laptop subkey leaks,
+it dies on its own eventually anyway.
+
+** Step 3 --- Back up to the USB stick
+:PROPERTIES:
+:CUSTOM_ID: step-3-back-up-to-the-usb-stick
+:END:
+The exported =master-secret.asc= retains the passphrase protection ---
+anyone restoring this file needs both the passphrase and access to the
+stick. The stick's filesystem itself stays unencrypted; that is fine,
+since the protection lives in the key file.
+
+#+begin_src sh
+  mkdir -p "/media/usb/pgp-master"
+  gpg --armor --export-secret-keys "$FPR"      > "/media/usb/pgp-master/master-secret.asc"
+  gpg --armor --export "$FPR"                  > "/media/usb/pgp-master/public.asc"
+  cp "$HOME/.gnupg/openpgp-revocs.d/$FPR.rev"  "/media/usb/pgp-master/"
+  chmod 600 "/media/usb/pgp-master"/*
+#+end_src
+
+The =.rev= file is the revocation certificate gpg generated
+automatically --- it lets you kill the key if the worst happens, so it
+belongs on the stick too. Note that it works *without* the passphrase,
+so treat it as protectively as the master key itself.
+
+** Step 4 --- Remove the primary from the laptop
+:PROPERTIES:
+:CUSTOM_ID: step-4-remove-the-primary-from-the-laptop
+:END:
+Strip the master secret key from =~/.gnupg=, keeping only the subkeys
+(as "stubs"):
+
+#+begin_src sh
+  gpg --armor --export-secret-subkeys "$FPR" > /tmp/subkeys.asc
+  gpg --delete-secret-key "$FPR"
+  gpg --import /tmp/subkeys.asc
+  rm /tmp/subkeys.asc     # use srm/shred if you're thorough
+#+end_src
+
+The subkey stubs inherit the passphrase protection, so daily operations
+(email, file encryption, commit signing) prompt for it --- gpg-agent
+caches it for a configurable time, so this is not disruptive.
+
+--------------
+
+** Listing keys and remembering each key's purpose
+:PROPERTIES:
+:CUSTOM_ID: listing-keys-and-remembering-each-keys-purpose
+:END:
+GnuPG displays each key's *purpose as bracketed letters* --- this is the
+built-in way to tell keys apart:
+
+#+begin_src sh
+  gpg -K        # secret keyring (laptop view)
+  gpg -k        # public view
+  gpg -K --fingerprint        # full fingerprints
+  gpg -K --with-keygrip      # keygrips, handy for git/ssh integration
+#+end_src
+
+Expected output on the laptop after Step 4:
+
+#+begin_example
+sec#  ed25519 2026-10-30 [C]
+      ABCD1234ABCD1234ABCD1234ABCD1234ABCD12345
+uid   [ultimate] Alice <alice@example.org>
+ssb   cv25519 2026-10-30 [E] [expires: 2028-10-29]
+ssb   ed25519 2026-10-30 [S] [expires: 2028-10-29]
+#+end_example
+
+| Marker | Meaning                                                                                                                 |
+|--------+-------------------------------------------------------------------------------------------------------------------------|
+| =sec#= | Secret primary key *not present* on this machine (stub only; =sec= without =#= would mean the full secret key is there) |
+| =[C]=  | Certify --- sign/manage other keys and this key's own structure                                                         |
+| =[S]=  | Sign --- commits, documents, emails                                                                                     |
+| =[E]=  | Encrypt --- emails, files                                                                                               |
+| =[A]=  | Authenticate --- SSH authentication                                                                                     |
+
+Multiple subkeys with the same purpose stay distinguishable by their
+*creation/expiry dates* shown on each =ssb= line. Since OpenPGP does not
+allow comments on keys, keep a plain-text =NOTES.txt= next to the
+backups on the USB stick, e.g.:
+
+#+begin_example
+cv25519 subkey, created 2026-10-30 — used for Thunderbird account alice@example.org and file encryption
+ed25519 subkey, created 2026-10-30 — used for git commit signing in free-software projects
+#+end_example
+
+--------------
+
+** Administering the key later
+:PROPERTIES:
+:CUSTOM_ID: administering-the-key-later
+:END:
+When you need the primary key --- adding UIDs, signing someone else's
+key, creating or revoking subkeys --- restore it temporarily (pinentry
+will prompt for the passphrase):
+
+#+begin_src sh
+  gpg --import "/media/usb/pgp-master/master-secret.asc"
+  # ... perform administrative tasks, e.g.:
+  gpg --sign-key <their-fingerprint>
+  # ... then remove the primary again (Step 4)
+#+end_src
+
+** Importing the subkeys into Thunderbird
+:PROPERTIES:
+:CUSTOM_ID: importing-the-subkeys-into-thunderbird
+:END:
+Thunderbird manages OpenPGP keys in its own internal store (since
+version 78), independent of =~/.gnupg=:
+
+#+begin_src sh
+  gpg --armor --export-secret-subkeys "$FPR" > ~/subkeys-for-thunderbird.asc
+#+end_src
+
+Then import via *Account Settings → End-to-End Encryption → Import*, and
+delete the exported file afterwards. Thunderbird will ask for the
+passphrase when first using the key and can remember it per session.
+
+#+begin_quote
+Caveat: Thunderbird does not support smartcards/tokens. If that ever
+becomes relevant, gpg remains the interface for token-based operations.
+#+end_quote
+
+--------------
+
+** Operational notes
+:PROPERTIES:
+:CUSTOM_ID: operational-notes
+:END:
+- *Two factors:* the passphrase is the cryptographic protection, the
+  stick is the physical one. Losing either one alone does not compromise
+  the master key --- but losing either one entirely means you can no
+  longer administer it.
+- Keep a second backup copy of the USB stick contents in a physically
+  separate location (sticks do die), passphrase-protected export
+  included.
+- Make sure the revocation certificate (=*.rev=) is in every backup;
+  consider storing it separately from the master key, since it requires
+  no passphrase to use.
+
+* License
+SPDX-FileCopyrightText: 2026 karmar <karmar@posteo.de>
+
+SPDX-License-Identifier: CC-BY-SA-4.0
