@@ -4,7 +4,7 @@
 #+title: Digital Independence
 
 There are a lot of projects especially by the Free Software Foundation Europe to
-gouvern digial self-souvereignability of users, politics and states.
+govern digial self-souvereignability of users, politics and states.
 The principles are well-known from topics before the internet and
 digitalisation.
 There is the goal to prevent monopolies by companies, distribute the power of

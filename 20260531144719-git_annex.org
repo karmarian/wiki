@@ -6,7 +6,7 @@
 git-annex allows managing large files with git, without storing the file
 contents in git.
 It can sync, backup, and archive your data, offline and online.
-Checksums and encryption keep your data safe and secure.
+Check-sums and encryption keep your data safe and secure.
 Bring the power and distributed nature of git to bear on your large files with
 git-annex.
 [fn:1] https://git-annex.branchable.com/
@@ -16,7 +16,7 @@ This is a compilation of the documentation provided at
 The workflow is targeted at users who want to have a lot of control over their
 repositories and synchronized content.
 Different devices and machines with certain access privileges can be structured
-in a decentralized fassion.
+in a decentralized fashion.
 
 * Git-annex sync workflow
 
